@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a99740b83785d946869b65eb64262e4, type: 3}
+  m_Name: MooTasks
+  m_EditorClassIdentifier: 
+  Tasks:
+  - Title: Blue;sNews
+    Position: {x: -3.202, y: 2.357}
+    Type: 2
+    Task: {fileID: 3864254862566287060, guid: d57a800a650eecd49ac5576e52159a5e, type: 3}
+    ItemSprites:
+    - {fileID: 21300000, guid: c658b4460d162e840a10bd9f8f4abfe8, type: 3}
+    - {fileID: 21300000, guid: 14838225b9f7fa948b2c91e92ffe3e76, type: 3}
+    Paramters: 
+    Conditions: 
+  - Title: Blue;sMusic
+    Position: {x: -2.247, y: 1.204}
+    Type: 1
+    Task: {fileID: 5834205465925047270, guid: 201e1105bd8eb4845934d759ce81ac18, type: 3}
+    ItemSprites:
+    - {fileID: 21300000, guid: 63994d475bd3dc84490b9837579cfaed, type: 3}
+    - {fileID: 21300000, guid: c1ac0ecdacc5d0547b0fedcd89f554c7, type: 3}
+    Paramters: 
+    Conditions: 
