@@ -4,11 +4,14 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SimpleButton : Selectable, IPointerDownHandler, IPointerUpHandler
+public class SimpleButton : Selectable, IPointerClickHandler
 {
 	private bool _isSelected;
 	[SerializeField] private bool _isVisible;
 
+	public Image MainImage => targetGraphic.GetComponent<Image>();
+	public RectTransform RectTransform => _rectTransform;
+	private RectTransform _rectTransform;
 	[SerializeField] protected CanvasGroup _canvasGroup;
 	private float _visibility;
 	private float _fadeTime = 0.1f;
@@ -19,6 +22,11 @@ public class SimpleButton : Selectable, IPointerDownHandler, IPointerUpHandler
 
 	public ButtonEvt EvtPointerDown = new ButtonEvt();
 	public ButtonEvt EvtPointerUp = new ButtonEvt();
+	public ButtonEvt EvtPointerClick = new ButtonEvt();
+	
+	public Action Evt_BasicEvent_Up = delegate {  };
+	public Action Evt_BasicEvent_Click = delegate {  };
+	public Action Evt_BasicEvent_Down = delegate {  };
 
 	public void SetFadeTime(float time)
 	{
@@ -30,8 +38,19 @@ public class SimpleButton : Selectable, IPointerDownHandler, IPointerUpHandler
 		_isVisible = on;
 	}
 
+	protected override void OnEnable()
+	{
+		base.OnEnable();
+	}
+
+	protected override void OnDisable()
+	{
+		base.OnDisable();
+	}
+
 	protected override void Awake()
 	{
+		_rectTransform = GetComponent<RectTransform>();
 		if (!_isVisible)
 			_canvasGroup.alpha = 0;
 	}
@@ -66,17 +85,26 @@ public class SimpleButton : Selectable, IPointerDownHandler, IPointerUpHandler
 				_canvasGroup.alpha = 0;
 			}
 		}
-	}	
-	
+	}
+
 	public override void OnPointerUp(PointerEventData eventData)
 	{
-		if (_isVisible)
-			EvtPointerUp.Invoke(eventData);
+		if (!_isVisible) return;
+		EvtPointerUp.Invoke(eventData);
+		Evt_BasicEvent_Up();
 	}
 
 	public override void OnPointerDown(PointerEventData eventData)
 	{
-		if (_isVisible)
-			EvtPointerDown.Invoke(eventData);
+		if (!_isVisible) return;
+		EvtPointerDown.Invoke(eventData);
+		Evt_BasicEvent_Down();
+	}
+
+	public void OnPointerClick(PointerEventData eventData)
+	{
+		if (!_isVisible) return;
+		EvtPointerClick.Invoke(eventData);
+		Evt_BasicEvent_Click();
 	}
 }

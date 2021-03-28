@@ -30,7 +30,7 @@ public class Task : MonoBehaviour
 		
 	}
 
-	protected virtual void Start()
+	protected virtual IEnumerator Start()
 	{
 		if (WorldObject != null)
 		{
@@ -38,6 +38,8 @@ public class Task : MonoBehaviour
 			WorldObject.transform.localPosition = new Vector3(0,0,100);
 			WorldObject.transform.localScale = Vector3.one;
 		}
+
+		yield return null;
 	}
 	
 	protected virtual void Update()

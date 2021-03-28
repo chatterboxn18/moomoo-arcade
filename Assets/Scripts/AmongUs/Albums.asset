@@ -16,7 +16,21 @@ MonoBehaviour:
   - Title: Hello
     OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     AlbumColor: {r: 0, g: 0, b: 0, a: 0}
-    TrackList: []
+    TrackList:
+    - Title: 
+      Subtitle: 
+      Description: 
+      Time: 
+      Links:
+      - URL: 
+        Icon: {fileID: 0}
+    - Title: 
+      Subtitle: 
+      Description: 
+      Time: 
+      Links:
+      - URL: 
+        Icon: {fileID: 0}
   - Title: Piano Man
     OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     AlbumColor: {r: 0, g: 0, b: 0, a: 0}
@@ -44,23 +58,85 @@ MonoBehaviour:
   - Title: Red Moon
     OutlineColor: {r: 0.22352941, g: 0.003921569, b: 0, a: 1}
     AlbumColor: {r: 0.78039217, g: 0.015686275, b: 0.105882354, a: 1}
-    TrackList:
-    - "\uC5EC\uB984\uBC24\uC758 \uAFC8"
-    - "\uB108\uB098 \uD574"
-    - "\uC7A5\uB9C8"
-    - "\uD558\uB298\uD558\uB298(\uCCAD\uC21C)"
-    - "\uC7A0\uC774\uB77C\uB3C4 \uC790\uC9C0"
-    - "SELFISH (Feat. \uC2AC\uAE30 of Red Velvet)"
+    TrackList: []
   - Title: Blue;s
     OutlineColor: {r: 0.9098039, g: 0.92156863, b: 0.91764706, a: 1}
     AlbumColor: {r: 0.14509805, g: 0.21960784, b: 0.5764706, a: 1}
     TrackList:
-    - "\uAC00\uC744\uC5D0\uC11C \uACA8\uC6B8\uB85C (Intro)"
-    - No more drama
-    - Wind flower
-    - HELLO
-    - "\uC0DD\uAC01\uBCF4\uB2E8 \uAD1C\uCC2E\uC544"
-    - Morning
+    - Title: "\uAC00\uC744\uC5D0\uC11C \uACA8\uC6B8\uB85C (Intro)"
+      Subtitle: "<b>Composed By: </b> \uAE40\uB3C4\uD6C8\n<b>Lyrics By:</b>  \uAE40\uB3C4\uD6C8\n<b>Arranged
+        By:</b> \uAE40\uB3C4\uD6C8"
+      Description: An intro that starts with a guitar that plays like the autumn
+        wind setting the stage for the rest of the album. Including a couple lines
+        from the title track itself, you know you are about to embark on a deeper,
+        reflective musical journey.
+      Time: 
+      Links:
+      - URL: https://open.spotify.com/track/2neXx5N1TgjTxoqAEvoaS6?si=a915e463c47a4e5a
+        Icon: {fileID: 21300000, guid: d1a9b504653a59e46b60722ffbdd1af5, type: 3}
+      - URL: https://www.youtube.com/watch?v=Z2PFYeZrRjU
+        Icon: {fileID: 21300000, guid: ef1b08ac996306b42b1eb8f301416d05, type: 3}
+    - Title: No more drama
+      Subtitle: "<b>Composed By: </b> \uAE40\uB3C4\uD6C8, \uC194\uB77C, \uBB38\uBCC4\n<b>Lyrics
+        By:</b>  \uAE40\uB3C4\uD6C8, \uC194\uB77C, \uBB38\uBCC4\n<b>Arranged By:</b>
+        \uAE40\uB3C4\uD6C8"
+      Description: Coming in with stronger percussion to set the scene of a relationship
+        that isn't working out anymore. The relationship has reached a tipping point,
+        and from here on out, it's over.
+      Time: 3:10
+      Links:
+      - URL: https://open.spotify.com/track/3KxYiSZ4n7ih45JtE2T518?si=b65a0165ee164d2a
+        Icon: {fileID: 21300000, guid: d1a9b504653a59e46b60722ffbdd1af5, type: 3}
+      - URL: https://www.youtube.com/watch?v=EI4MqHPsmhs
+        Icon: {fileID: 21300000, guid: ef1b08ac996306b42b1eb8f301416d05, type: 3}
+    - Title: Wind flower
+      Subtitle: "<b>Composed By: </b> \uAE40\uB3C4\uD6C8, \uBC15\uC6B0\uC0C1\n<b>Lyrics
+        By:</b> \uAE40\uB3C4\uD6C8, \uBC15\uC6B0\uC0C1, \uBB38\uBCC4\n<b>Arranged
+        By:</b> \uAE40\uB3C4\uD6C8, \uBC15\uC6B0\uC0C1"
+      Description: 'There is nothing like a mix of R&B when it comes to a good break
+        up song. Full of regrets and agnst, the song wonders how everything else
+        can be doing so well when a relationship has done. '
+      Time: 3:56
+      Links:
+      - URL: https://open.spotify.com/track/2qwyjoSsSr3M7HTt611Q5O?si=6b6450595ab74250
+        Icon: {fileID: 21300000, guid: d1a9b504653a59e46b60722ffbdd1af5, type: 3}
+      - URL: https://www.youtube.com/watch?v=B09fEHm48ZI
+        Icon: {fileID: 21300000, guid: ef1b08ac996306b42b1eb8f301416d05, type: 3}
+    - Title: "HELLO (Solo \uC194\uB77C)"
+      Subtitle: "<b>Composed By: </b> \uC194\uB77C\n<b>Lyrics By:</b> \uC194\uB77C\n<b>Arranged
+        By:</b> \uAE40\uB3C4\uD6C8, \uBC0D\uD0A4"
+      Description: WIth some R&B mix, let Solar's powerful vocals tell you the story
+        of wanting to start again with a lost love.
+      Time: 3:16
+      Links:
+      - URL: https://open.spotify.com/track/0HpLJx1WSjDotLuHkHLlZr?si=58500e1f0f9246e1
+        Icon: {fileID: 21300000, guid: d1a9b504653a59e46b60722ffbdd1af5, type: 3}
+      - URL: https://www.youtube.com/watch?v=hZoLpNWGkhE
+        Icon: {fileID: 21300000, guid: ef1b08ac996306b42b1eb8f301416d05, type: 3}
+    - Title: "\uC0DD\uAC01\uBCF4\uB2E8 \uAD1C\uCC2E\uC544 (Better Than I Thought)"
+      Subtitle: "<b>Composed By: </b> \uC774\uD6C4\uC0C1\n<b>Lyrics By:</b>  \uC774\uD6C4\uC0C1,
+        \uBB38\uBCC4\n<b>Arranged By:</b> \uC774\uD6C4\uC0C1"
+      Description: Beginning with just a simple strum pattern, Mamamoo's crisp and
+        clean vocals make you revisit a heartbreak that you turned out to handle
+        better than you thought. Ironic, isn't it?
+      Time: 3:23
+      Links:
+      - URL: https://open.spotify.com/track/3Ab6JZWdTEj48lrHFg1HBI?si=35477b6de0c5489b
+        Icon: {fileID: 21300000, guid: d1a9b504653a59e46b60722ffbdd1af5, type: 3}
+      - URL: https://www.youtube.com/watch?v=Sd51Tfz9Z8c
+        Icon: {fileID: 21300000, guid: ef1b08ac996306b42b1eb8f301416d05, type: 3}
+    - Title: Morning
+      Subtitle: "<b>Composed By: </b> \uBC15\uC6B0\uC0C1\n<b>Lyrics By:</b> \uBC15\uC6B0\uC0C1,
+        \uBB38\uBCC4\n<b>Arranged By:</b> \uBC15\uC6B0\uC0C1"
+      Description: The piano and synths start the song like a sunrise bringing you
+        to a thoughtful morning of spite towards the one who makes you feel lonely
+        without them but hurt when they leave you.
+      Time: 4:04
+      Links:
+      - URL: https://open.spotify.com/track/2FdCy1Qxz8z1JiVaTKyOy1?si=2317a8a378954069
+        Icon: {fileID: 21300000, guid: d1a9b504653a59e46b60722ffbdd1af5, type: 3}
+      - URL: https://www.youtube.com/watch?v=7x4zzzC24DM
+        Icon: {fileID: 21300000, guid: ef1b08ac996306b42b1eb8f301416d05, type: 3}
   - Title: White Wind
     OutlineColor: {r: 0, g: 0, b: 0, a: 0}
     AlbumColor: {r: 0, g: 0, b: 0, a: 0}

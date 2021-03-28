@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SkateRental.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/IceCreamShop.unity
     guid: 8a1e4179043ca1a488c5b877f2ccf812
+  - enabled: 1
+    path: Assets/Scenes/MMMAU.unity
+    guid: ba00c8d9959177e49aaaea8df9b53cf0
   m_configObjects: {}

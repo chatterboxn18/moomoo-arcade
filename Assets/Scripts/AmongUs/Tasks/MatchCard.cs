@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ public class MatchCard : MonoBehaviour
 	[SerializeField] private Image _mainImage;
 	[SerializeField] private Text _mainText;
 	[SerializeField] private bool _startVisible;
+	[SerializeField] private SimpleButton _button;
 
 	private bool _isRevealing;
 	[SerializeField] private float _revealTime;
@@ -28,7 +30,7 @@ public class MatchCard : MonoBehaviour
 	{
 		_mainText.text = name;
 	}
-	
+
 	private void Update()
 	{
 		if (!_isText && _mainImage.color.a >= 1)
@@ -53,7 +55,11 @@ public class MatchCard : MonoBehaviour
 		}
 	}
 
-
+	public SimpleButton GetButton()
+	{
+		return _button != null ? _button : null;
+	}
+	
 	public void Evt_Reveal()
 	{
 		_isRevealing = true;

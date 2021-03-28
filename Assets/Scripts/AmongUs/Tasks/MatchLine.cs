@@ -9,11 +9,12 @@ public class MatchLine : Task
 	[SerializeField] private Camera _taskCamera;
 	private Vector3 _startPosition;
 
-	protected override void Start()
+	protected override IEnumerator Start()
 	{
 		_lineRenderer.positionCount = 2; 
 		_lineRenderer.SetPosition(0, new Vector3(_startPositions.x, _startPositions.y, _startPositions.z));
 		_lineRenderer.SetPosition(1, new Vector3(_startPositions.x, _startPositions.y, _startPositions.z));
+		yield return null;
 	}
 
 	public void SetCamera(Camera camera)

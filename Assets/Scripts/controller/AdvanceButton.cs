@@ -11,8 +11,6 @@ public class AdvanceButton : SimpleButton
 	[SerializeField] private CanvasGroup _activeGroup;
 	[SerializeField] private CanvasGroup _inactiveGroup;
 
-	public Action Evt_BasicEvent_Up = delegate {  };
-	public Action Evt_BasicEvent_Down = delegate {  };
 
 	private float _activeTime = .5f;
 	private float _activeTimer = 0f;
@@ -20,18 +18,6 @@ public class AdvanceButton : SimpleButton
 	public void SetActive(bool on)
 	{
 		_isActive = on;
-	}
-
-	public override void OnPointerUp(PointerEventData eventData)
-	{
-		base.OnPointerUp(eventData);
-		Evt_BasicEvent_Up();
-	}
-
-	public override void OnPointerDown(PointerEventData eventData)
-	{
-		base.OnPointerDown(eventData);
-		Evt_BasicEvent_Down();
 	}
 
 	protected override void Update()

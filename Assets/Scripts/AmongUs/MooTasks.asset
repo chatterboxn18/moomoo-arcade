@@ -31,3 +31,12 @@ MonoBehaviour:
     - {fileID: 21300000, guid: c1ac0ecdacc5d0547b0fedcd89f554c7, type: 3}
     Paramters: 
     Conditions: 
+  - Title: Blue;sVideo
+    Position: {x: -5.661, y: 3.186}
+    Type: 3
+    Task: {fileID: 1325995975142440610, guid: 18fc8ca4fadf7204a9f678a2955acc55, type: 3}
+    ItemSprites:
+    - {fileID: 21300000, guid: d7be219d38e0ebc4eb23ac70c5f93d9e, type: 3}
+    - {fileID: 21300000, guid: 3f8abd3d940cd8c46976aa43ea51fdf8, type: 3}
+    Paramters: Blue;s
+    Conditions: 

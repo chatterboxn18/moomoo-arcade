@@ -12,15 +12,17 @@ public class OrderedButtons : Task
 	private int _buttonNumber;
 	private int _index;
 
-	protected override void Start()
+	protected override IEnumerator Start()
 	{
-		base.Start();
+		yield return base.Start();
 		for (var i = 0; i < _buttonNumber; i++)
 		{
 			var button = Instantiate(_buttonPrefab, _gridLayout.transform);
 			button.Index = i;
 			button.Evt_CheckMatch += CheckNumber;
 		}
+
+		yield return null;
 	}
 
 	private void CheckNumber(int index, Action onSuccess)

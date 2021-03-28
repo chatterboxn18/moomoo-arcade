@@ -81,4 +81,9 @@ public static class Extensions
 		color = new Color(color.r, color.g, color.b, alpha);
 		return color;
 	}
+
+	public static Sprite Texture2DToSprite(Texture2D texture)
+	{
+		return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+	}
 }

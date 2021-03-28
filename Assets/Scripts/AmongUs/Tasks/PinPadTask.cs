@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -21,9 +22,9 @@ public class PinPadTask : Task
 	private Pins _currentPin;
 	[SerializeField] private Text _clueText;
 	
-	protected override void Start()
+	protected override IEnumerator Start()
 	{
-		base.Start();
+		yield return base.Start();
 		for (int i = 0; i < 9; i++)
 		{
 			SetButton(i + 1);

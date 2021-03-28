@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using AmongUs;
 using UnityEngine;
@@ -55,9 +56,15 @@ public class TaskManager : MonoBehaviour
 		}
 	}
 
-	private void Start()
+	private IEnumerator Start()
 	{
 		//_currentTaskIndex = _DEBUGIndex;
+
+		while (!MMMAUResourceManager.IsDataReady)
+		{
+			yield return null;
+		}
+		
 		for (var i = 0; i < _taskObjects.Length; i++)
 		{
 			CreateTask(i);
