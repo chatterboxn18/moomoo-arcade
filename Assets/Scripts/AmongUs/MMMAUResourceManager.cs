@@ -181,12 +181,7 @@ public class MMMAUResourceManager : MonoBehaviour
 	{
 		var sprite = _defaultSprite;
 #if !UNITY_WEBGL
-		request = UnityWebRequestTexture.GetTexture(url);
-		request.SetRequestHeader("Access-Control-Allow-Credentials", "true");
-		request.SetRequestHeader("Access-Control-Allow-Headers",
-			"Accept, Content-Type, X-Access-Token, X-Application-Name, X-Request-Sent-Time");
-		request.SetRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
-		request.SetRequestHeader("Access-Control-Allow-Origin", "*");
+		var request = UnityWebRequestTexture.GetTexture(url);
 		yield return request.SendWebRequest();
 			
 		var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
