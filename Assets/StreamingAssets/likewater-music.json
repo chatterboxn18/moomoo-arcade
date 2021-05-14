@@ -5,20 +5,20 @@
 			"Links": 
 			[
 				{
-					"icon" : "https://img.youtube.com/vi/uOZ2r_UAfdc/maxresdefault.jpg",
-					"link" : "https://www.youtube.com/watch?v=uOZ2r_UAfdc",
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-spotify.png",
+					"link" : "https://open.spotify.com/track/37LhFxchiyAJVop5JgRZgY?si=704484c815e4449c"
 				},
 				{
-					"icon" : "https://img.youtube.com/vi/uOZ2r_UAfdc/maxresdefault.jpg",
-					"link" : "https://www.youtube.com/watch?v=uOZ2r_UAfdc",
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-apple.png",
+					"link" : "https://music.apple.com/us/album/like-water/1560769290"
 				},
 				{
-					"icon" : "https://img.youtube.com/vi/uOZ2r_UAfdc/maxresdefault.jpg",
-					"link" : "https://www.youtube.com/watch?v=uOZ2r_UAfdc",
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-youtube.png",
+					"link" : "https://music.youtube.com/watch?v=vyuQAgDBKM4"
 				},
 				{
-					"icon" : "https://img.youtube.com/vi/uOZ2r_UAfdc/maxresdefault.jpg",
-					"link" : "https://www.youtube.com/watch?v=uOZ2r_UAfdc",
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-deezer.png",
+					"link" : "https://deezer.page.link/R2iPLANfMg9MtHLTA"
 				}
 			],
 			"Videos": 
@@ -108,6 +108,71 @@
 					"win": ""
 				}
 			]
-		}				
+		},
+{
+			"Title": "Why Can't You Love Me?", 
+			"Links": 
+			[
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-spotify.png",
+					"link" : "https://open.spotify.com/track/7cXJOM8t8pftyFgYp5Sm1N"
+				},
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-apple.png",
+					"link" : "https://music.apple.com/us/album/the-road/1560769290"
+				},
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-youtube.png",
+					"link" : "https://music.youtube.com/watch?v=DiAuyUOfUEA"
+				},
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-deezer.png",
+					"link" : "https://deezer.page.link/3V8BFsicUsnLP54d6"
+				}
+			],
+			"Videos": 
+			[
+				{
+					"title": "[Mdromeda] Why Can’t You Love Me? Band Ver.",
+					"date": "2021-04-13",
+					"image-url": "https://img.youtube.com/vi/_IzQGO7UiNk/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=_IzQGO7UiNk",
+					"win": ""
+				},
+				{
+					"title": "[KSY] Why Can't You Love Me?",
+					"date": "2021-04-12",
+					"image-url": "https://img.youtube.com/vi/o_PXWsAWOY0/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=o_PXWsAWOY0",
+					"win": ""
+				}
+			]
+		},
+{
+			"Title": "The Road", 
+			"Links": 
+			[
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-spotify.png",
+					"link" : "https://open.spotify.com/track/7cXJOM8t8pftyFgYp5Sm1N"
+				},
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-apple.png",
+					"link" : "https://music.apple.com/us/album/the-road/1560769290"
+				},
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-youtube.png",
+					"link" : "https://music.youtube.com/watch?v=DiAuyUOfUEA"
+				},
+				{
+					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-deezer.png",
+					"link" : "https://deezer.page.link/3V8BFsicUsnLP54d6"
+				}
+			],
+			"Videos": 
+			[
+			
+			]
+		}	
 	]
 }

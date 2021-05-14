@@ -17,7 +17,8 @@ public class LWFlowerGroup : MonoBehaviour
 		public Image Image;
 		public Sprite[] Sprites;
 		public TextMeshProUGUI DateTag;
-		public int Day;
+		public string Date;
+		public SimpleButton Button;
 	}
 	
 	public bool IsFull {get
@@ -26,7 +27,7 @@ public class LWFlowerGroup : MonoBehaviour
 		return isFull == 3;
 	}}
 
-	private int _frameCount = 60;
+	private int _frameCount = 45;
 	private int _frame = 0;
 	private int _currentFrame = 0;
 
@@ -44,9 +45,25 @@ public class LWFlowerGroup : MonoBehaviour
 		_plants[indexOnShelf].isActive = true;
 	}
 
-	public void SetDate(int indexOnShelf, int day)
+	private void Evt_OpenPopup(string day)
 	{
-		_plants[indexOnShelf].Day = day;
+		var date = DateTime.Parse(day);
+		var dict = LWData.current.FlowerDictionary;
+		LWData.current.MainFlower = date.ToShortDateString();
+		if (dict[date.Month + "/" + date.Year][date.Day-1].PlantIndex != -1)
+		{
+			LWTransitionController.TransitionOn(LWTransitionController.Controllers.Popup);
+		}
+		else
+		{
+			LWTransitionController.TransitionTo(LWTransitionController.Controllers.Pot, LWTransitionController.Controllers.Shop );
+		}
+	}
+	
+	public void SetDate(int indexOnShelf, string date)
+	{
+		_plants[indexOnShelf].Button.Evt_BasicEvent_Click += () => Evt_OpenPopup(date);
+		_plants[indexOnShelf].Date = date;
 	}
 	
 	public Plant GetPlant(int index)

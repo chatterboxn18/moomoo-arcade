@@ -21,4 +21,10 @@ public class LWMediaCard : MonoBehaviour
             _button.Evt_BasicEvent_Click += () => { Application.OpenURL(item.Url); };
         }
     }
+
+    public void SetMusicLink(LWResourceManager.LinkItem item)
+    {
+        _mediaImage.sprite = item.Icon;
+        _button.Evt_BasicEvent_Click += () => Application.OpenURL(item.Link);
+    }
 }

@@ -5,122 +5,135 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class LWMain : MonoBehaviour
+namespace LikeWater
 {
-	[Serializable]
-	public struct CharacterAudio
+	
+	public class LWMain : MonoBehaviour
 	{
-		public string Quote;
-		public AudioClip Clip;
-	}
-
-	[SerializeField] private TextMeshProUGUI _buttonText;
-	[SerializeField] private AudioSource _audioSource;
-	[SerializeField] private CharacterAudio[] _characterAudio;
-	[SerializeField] private Transform _groupBubble;
-	private bool _isBubbleVisible;
-
-	private bool _isActivePlant;
-	[SerializeField] private LWFlowerGroup _activeFlower;
-
-	[SerializeField] private TextMeshProUGUI _textCoin;
-
-	private DateTime _todayDate;
-
-	[Header("Controllers")]
-	[SerializeField] private LWShopController _shopController;
-	[SerializeField] private LWWaterController _waterController;
-
-	private IEnumerator Start()
-	{
-		while (!LWResourceManager.IsLoaded)
-			yield return null;
-
-		//Always just show last displayed flower 
+		[Serializable]
+		public struct CharacterAudio
+		{
+			public string Quote;
+			public AudioClip Clip;
+		}
+	
+		[SerializeField] private TextMeshProUGUI _buttonText;
+		[SerializeField] private AudioSource _audioSource;
+		[SerializeField] private CharacterAudio[] _characterAudio;
+		[SerializeField] private Transform _groupBubble;
+		private bool _isBubbleVisible;
+	
+		private bool _isActivePlant;
+		[SerializeField] private LWFlowerGroup _activeFlower;
+	
+		[SerializeField] private TextMeshProUGUI _textCoin;
+	
+		[SerializeField] private Sprite _emptyPot;
 		
-		var date = DateTime.Today;
-		var dict = LWData.current.FlowerDictionary;
-		var key = date.Month + "/" + date.Year;
-		if (dict.ContainsKey(key))
+		private DateTime _todayDate;
+	
+		private LWData.FlowerMonth _currentFlower
 		{
-			// this should always work because when I add the key, I fill out the entire list with the days
-			LWData.current.CurrentFlower = dict[key][date.Day];
-		}
-		else
-		{
-			LWData.current.CurrentFlower = new LWData.FlowerMonth();
-			LWData.current.CurrentFlower.Date = date.ToShortDateString();
-		}
-
-		// sorta don't see the point of the code below anymore
-		/*if (_todayDate == new DateTime() && PlayerPrefs.HasKey(LWConfig.TodayDateKey))
-		{
-			if (DateTime.TryParse(PlayerPrefs.GetString(LWConfig.TodayDateKey), out DateTime dateTime))
+			get
 			{
-				Debug.Log("Player Pref datetime: " + dateTime.Date);
-				if (dateTime.Date != DateTime.Today.Date)
+				if (string.IsNullOrEmpty(LWData.current.MainFlower))
+					return new LWData.FlowerMonth();
+				var currentFlower = DateTime.Parse(LWData.current.MainFlower);
+				var data = LWData.current.FlowerDictionary[currentFlower.Month + "/" + currentFlower.Year][currentFlower.Day-1];
+				return data;
+			}
+		}
+	
+	
+		private IEnumerator Start()
+		{
+			while (!LWResourceManager.IsLoaded)
+				yield return null;
+	
+			if (!string.IsNullOrEmpty(LWData.current.MainFlower))
+			{
+				var dateString = DateTime.Today.ToShortDateString();
+				if (LWData.current.MainFlower != dateString)
 				{
-					LWData.current.CurrentFlower = new LWData.FlowerMonth();
-				}
-				else
-				{
-					//LWData.current.CurrentFlower = LWData.current.FlowerDictionary[dateTime.Month];
+					LWData.current.MainFlower = dateString;
+					SerializationManager.Save(LWConfig.DataSaveName, LWData.current);
 				}
 			}
-			PlayerPrefs.SetString(LWConfig.TodayDateKey, DateTime.Today.ToShortDateString());
-			_todayDate = DateTime.Today;
-		}*/
-
-	}
-
-	private void UpdateActiveFlower()
-	{
-		if (LWData.current.CurrentFlower.PlantIndex == -1)
-			return;
-		var data = LWData.current.CurrentFlower;
-		var sprites = LWResourceManager.Sprites[data.PlantIndex];
-		var index = data.SpriteIndex * 2;
-		var sprite = new []{sprites[index], sprites[index+1]};
-		_activeFlower.SetPlant(0, sprite, LWData.current.CurrentFlower.Date);
-	}
-
-	public void ButtonEvt_FlowerPot()
-	{
-		if (LWData.current.CurrentFlower.PlantIndex == -1)
-		{
-			_shopController.gameObject.SetActive(true);
-		}
-		else
-		{
-			//small infographic of current flower
-		}
-	}
-
-	public void ButtonEvt_OpenWater()
-	{
-		if (LWData.current.CurrentFlower.PlantIndex == -1)
-		{
-			_shopController.gameObject.SetActive(true);
-		}
-		else
-		{
-			_waterController.gameObject.SetActive(true);
-		}
-	}
+			Evt_UpdateActiveFlower();
+			Evt_UpdateCoins();
+			//Show last displayed flower 
+			//todo: HERE
 	
-	public void ButtonEvt_PlayAudio()
-	{
-		if (!_isBubbleVisible) return;
-		var randomInt = Random.Range(0, _characterAudio.Length);
-		_buttonText.text = _characterAudio[randomInt].Quote;
-		_audioSource.clip = _characterAudio[randomInt].Clip;
-		_audioSource.Play();
-	}
+		}
+	
+		public void Evt_UpdateActiveFlower()
+		{
+			var currentFlower = _currentFlower;
+			var sprite = new []{_emptyPot, _emptyPot};
+			if (currentFlower.PlantIndex != -1)
+			{
+				var sprites = LWResourceManager.Sprites[_currentFlower.PlantIndex];
+				var index = _currentFlower.SpriteIndex * 2;
+				sprite = new []{sprites[index], sprites[index+1]};
+			}
+			
+			_activeFlower.SetPlant(0, sprite);
+		}
+	
+		public void Evt_UpdateCoins()
+		{
+			_textCoin.text = LWData.current.Coins.ToString();
+		}
+		
+		public void ButtonEvt_FlowerPot()
+		{
+			if (_currentFlower.PlantIndex == -1)
+			{
+				LWTransitionController.TransitionOn(LWTransitionController.Controllers.Shop);
+			}
+			else
+			{
+				LWTransitionController.TransitionOn(LWTransitionController.Controllers.Popup);
+			}
+		}
+	
+		public void ButtonEvt_OpenWater()
+		{
+			if (_currentFlower.PlantIndex == -1)
+			{
+				LWTransitionController.TransitionOn(LWTransitionController.Controllers.Shop);
+			}
+			else
+			{
+				LWTransitionController.TransitionOn(LWTransitionController.Controllers.Water);
+			}
+		}
+		
+		public void ButtonEvt_PlayAudio()
+		{
+			if (!_isBubbleVisible) return;
+			var randomInt = Random.Range(0, _characterAudio.Length);
+			_buttonText.text = _characterAudio[randomInt].Quote;
+			_audioSource.clip = _characterAudio[randomInt].Clip;
+			_audioSource.Play();
+		}
+	
+		public void ButtonEvt_ToggleBubble()
+		{
+			_isBubbleVisible = !_isBubbleVisible;
+			_groupBubble.gameObject.SetActive(_isBubbleVisible);
+			ButtonEvt_PlayAudio();
+		}
 
-	public void ButtonEvt_ToggleBubble()
-	{
-		_isBubbleVisible = !_isBubbleVisible;
-		_groupBubble.gameObject.SetActive(_isBubbleVisible);
-		ButtonEvt_PlayAudio();
+		public void ButtonEvt_Open(int index)
+		{
+			LWTransitionController.TransitionOn((LWTransitionController.Controllers) index);
+		}
+
+		public void ButtonEvt_Close(int index)
+		{
+			LWTransitionController.TransitionOff((LWTransitionController.Controllers) index);
+		}
 	}
 }
+

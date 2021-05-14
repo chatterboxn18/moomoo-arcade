@@ -8,18 +8,24 @@ public class AdvanceButton : SimpleButton
 {
 	[SerializeField] private bool _isActive;
 
+	public bool Active => _isActive;
 	[SerializeField] private CanvasGroup _activeGroup;
 	[SerializeField] private CanvasGroup _inactiveGroup;
 
 
-	private float _activeTime = .5f;
+	private float _activeTime = .2f;
 	private float _activeTimer = 0f;
 
 	public void SetActive(bool on)
 	{
 		_isActive = on;
 	}
-
+	
+	public void Toggle()
+	{
+		_isActive = !_isActive;
+	}
+	
 	protected override void Update()
 	{
 		base.Update();

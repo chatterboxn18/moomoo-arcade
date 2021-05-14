@@ -13,6 +13,20 @@ public class LWShopItem : MonoBehaviour
 	private SimpleButton _button;
 	public SimpleButton Button => _button;
 	private LWResourceManager.Flower _flower;
+	
+	public Action<string> Evt_BoughtFlower = delegate {  };
+	
+	private LWData.FlowerMonth _currentFlower
+	{
+		get
+		{
+			if (string.IsNullOrEmpty(LWData.current.MainFlower))
+				return new LWData.FlowerMonth();
+			var currentFlower = DateTime.Parse(LWData.current.MainFlower);
+			var data = LWData.current.FlowerDictionary[currentFlower.Month + "/" + currentFlower.Year][currentFlower.Day-1];
+			return data;
+		}
+	}
 
 	private void Awake()
 	{
@@ -29,34 +43,29 @@ public class LWShopItem : MonoBehaviour
 
 	public void ButtonEvt_BuyFlower()
 	{
-		//extra check but it should be -1
-		var currentFlower = LWData.current.CurrentFlower;
-		var date = DateTime.Parse(currentFlower.Date);
-		var dict = LWData.current.FlowerDictionary;
-		if (currentFlower.PlantIndex == -1)
+		var coins = LWData.current.Coins;
+		if (_flower.Cost > coins)
 		{
-			currentFlower.PlantIndex = _flower.Index;
-			currentFlower.SpriteIndex = 0;
+			
+			return;
+		}
 
-			dict[date.Month + "/" + date.Year][date.Day - 1] = currentFlower;
+		LWData.current.Coins -= _flower.Cost;
+		//extra check but it should be -1
+		var date = DateTime.Parse(_currentFlower.Date);
+		var dict = LWData.current.FlowerDictionary;
+
+		if (_currentFlower.PlantIndex == -1)
+		{
+			_currentFlower.PlantIndex = _flower.Index;
+			_currentFlower.SpriteIndex = 0;
+
+			dict[date.Month + "/" + date.Year][date.Day - 1] = _currentFlower;
 		}
 
 		LWData.current.FlowerDictionary = dict;
-
+		Evt_BoughtFlower(LWData.current.Coins.ToString());
 		SerializationManager.Save(LWConfig.DataSaveName, LWData.current);
-		/*
-		if (LWData.current.CurrentFlower.PlantIndex == -1)
-		{
-			var date = DateTime.Today;
-			var flower = LWData.current.CurrentFlower;
-			if (string.IsNullOrEmpty(flower.Date))
-				flower.Date = date.Day.ToString();
-			flower.PlantIndex = _flower.Index;
-			var dict = LWData.current.FlowerDictionary;
-			var key = date.Month + "/" + date.Year;
-			dict[key][date.Day] = flower;
-			LWData.current.CurrentFlower = flower;
-			LWData.current.FlowerDictionary = dict;
-		}*/
+		LWTransitionController.TransitionTo(LWTransitionController.Controllers.Shop, LWTransitionController.Controllers.Water);
 	}
 }

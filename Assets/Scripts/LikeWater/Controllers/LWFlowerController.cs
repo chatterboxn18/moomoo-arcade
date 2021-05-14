@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class LWFlowerController : MonoBehaviour
+public class LWFlowerController : LWBaseController
 {
 	[SerializeField] private LWFlowerGroup _flowerGroupPrefab;
 	[SerializeField] private Transform _flowerGroupContainer;
@@ -20,7 +20,7 @@ public class LWFlowerController : MonoBehaviour
 
 	private bool _isTransitioning;
 
-	private void Start()
+	private void OnEnable()
 	{
 		var todayDate = DateTime.Now;
 		_displayMonth = todayDate.Month;
@@ -100,7 +100,6 @@ public class LWFlowerController : MonoBehaviour
 			var groupIndex = Mathf.FloorToInt(day / _columns);
 			var currentFlower = _flowerGroups[groupIndex];
 			currentFlower.GetPlant(index).DateTag.text = month + "/" + (day +1);
-			currentFlower.SetDate(index, day);
 			if (!hasKey)
 			{
 				var flower = new LWData.FlowerMonth();
@@ -108,6 +107,7 @@ public class LWFlowerController : MonoBehaviour
 				LWData.current.FlowerDictionary[key].Add(flower);
 				var empty = new []{_emptyPot, _emptyPot};
 				currentFlower.SetPlant(index, empty);
+				currentFlower.SetDate(index, tempDate.Month +"/" + (day + 1) + "/" + tempDate.Year);
 			}
 			else
 			{
@@ -116,12 +116,15 @@ public class LWFlowerController : MonoBehaviour
 				{
 					var empty = new []{_emptyPot, _emptyPot};
 					currentFlower.SetPlant(index, empty);
+					currentFlower.SetDate(index, tempDate.Month +"/" + (day + 1) + "/" + tempDate.Year);
 					continue;
 				}
 				var sprites = LWResourceManager.Sprites[data.PlantIndex];
 				var spriteIndex = data.SpriteIndex * 2;
 				var sprite = new []{sprites[spriteIndex], sprites[spriteIndex + 1]};
 				_flowerGroups[groupIndex].SetPlant(index, sprite);
+				_flowerGroups[groupIndex].SetDate(index, tempDate.Month +"/" + (day + 1) + "/" + tempDate.Year);
+				
 			}
 		}
 

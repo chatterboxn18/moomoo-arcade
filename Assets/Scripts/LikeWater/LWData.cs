@@ -23,32 +23,12 @@ public class LWData
 	}
 
 	public int Coins;
+	public int Goal = 64;
 
-	private Dictionary<string, List<FlowerMonth>> _flowerDictionary;
-
-	public Dictionary<string, List<FlowerMonth>> FlowerDictionary
-	{
-		get
-		{
-			if (_flowerDictionary == null) 
-				return new Dictionary<string, List<FlowerMonth>>();
-			return _flowerDictionary;
-		}
-		set => _flowerDictionary = value;
-	}
-
-	private FlowerMonth _currentFlower; 
-	public FlowerMonth CurrentFlower {
-		get
-		{
-			if (_currentFlower == null) 
-				return new FlowerMonth();
-			return _currentFlower;
-		}
-		set => _currentFlower = value;
-	}
+	public Dictionary<string, List<FlowerMonth>> FlowerDictionary = new Dictionary<string,List<FlowerMonth>>();
 
 	public string MainFlower;
+	public string DisplayFlower;
 	
 	[Serializable]
 	public class FlowerMonth
@@ -57,11 +37,14 @@ public class LWData
 		public int SpriteIndex;
 		public string Date;
 		public string Attributes;
-		public string Goal;
+		public int DrinkAmount;
+		public int Goal;
+		public bool IsComplete;
 
 		public FlowerMonth() {
 			SpriteIndex = 0;
 			PlantIndex = -1;
+			Attributes = "";
 		}
 	}
 
@@ -71,7 +54,13 @@ public class LWData
 	{
 		public int SpriteIndex;
 		public string Color;
-		public string Attributes;
+		public Dictionary<string, int> Attributes;
+
+		public Drink()
+		{
+			Color = "#FFFFFF";
+			Attributes = new Dictionary<string, int> {{LWConfig.AttributeWaterKey, 8}};
+		}
 	}
 	public List<Drink> DrinkAttributes
 	{
@@ -86,4 +75,16 @@ public class LWData
 	}
 
 	private List<Drink> _drinkAttributes;
+	
+	[Serializable]
+	public class NotificationData
+	{
+		public string Time;
+		public bool IsActive;
+		public string Type;
+		public List<int> Ids = new List<int>();
+		public Dictionary<DayOfWeek, string> Notifications = new Dictionary<DayOfWeek, string>();
+	}
+
+	public List<NotificationData> Notifications = new List<NotificationData>();
 }

@@ -38,28 +38,17 @@ public class LWDrinkController : MonoBehaviour
 	
 	public void Setup(LWWaterController.Attributes[] attributes)
 	{
-		// I don't have a nice dynamic way to add extra attributes yet :<
+		// Takes all the known attributes and adds it to the drink controller and if it doens't already have 
+		// value then add a new field
 		if (_index < LWData.current.DrinkAttributes.Count)
 		{
-			var list = LWData.current.DrinkAttributes[_index].Attributes.Split(',');
-			foreach (var item in list)
-			{
-				var items = item.Split(':');
-				if (int.TryParse(items[1], out var number))
-					_drinkAttributes[items[0]] = number;
-				else
-				{
-					Debug.LogError("Failed to parse data correctly");
-					_drinkAttributes[items[0]] = 0;
-				}
-			}
-		}
-		else
-		{
+			_drinkAttributes = LWData.current.DrinkAttributes[_index].Attributes;
 			foreach (var item in attributes)
 			{
-				_drinkAttributes[item.Name] = 0;
+				if (!_drinkAttributes.ContainsKey(item.Name))
+					_drinkAttributes.Add(item.Name,0);
 			}
+			LWData.current.DrinkAttributes[_index].Attributes = _drinkAttributes;
 		}
 	}
 

@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class LWShopController : MonoBehaviour
+public class LWShopController : LWBaseController
 {
     [SerializeField] private Transform _shopContainer;
     [SerializeField] private LWShopItem _shopItem;
+    [SerializeField] private TextMeshProUGUI _coinText;
 
-    private IEnumerator Start()
+    private new IEnumerator Start()
     {
         while (!LWResourceManager.IsLoaded)
             yield return null;
@@ -18,6 +21,7 @@ public class LWShopController : MonoBehaviour
             var item = Instantiate(_shopItem, _shopContainer);
             //_shopItem.MainImage.sprite = sprites[key][0];
             item.SetItem(sprites[flower.Index][0], flower);
+            item.Evt_BoughtFlower += (text) => { _coinText.text = text; };
         }
         
     }

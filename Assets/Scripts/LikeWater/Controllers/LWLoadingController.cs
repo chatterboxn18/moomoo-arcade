@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 
 public class LWLoadingController : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class LWLoadingController : MonoBehaviour
 	private void Awake()
 	{
 		_animator = GetComponent<Animator>();
+	}
+
+	private void Start()
+	{
 	}
 
 	private void Update()

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LWWaterController : MonoBehaviour
+public class LWWaterController : LWBaseController
 {
 	private Animator _animator;
 	
@@ -17,6 +17,7 @@ public class LWWaterController : MonoBehaviour
 	private int _drinkCount = 0;
 	[SerializeField] private Image _fillOutline;
 	private int _maxAttributeCount = 6;
+	private Dictionary<string, int> _activeAttributes = new Dictionary<string, int>();
 
 	[SerializeField] private LWFlowerGroup _activeFlower;
 	[SerializeField] private LWAttribute _attributePrefab;
@@ -34,6 +35,19 @@ public class LWWaterController : MonoBehaviour
 	[SerializeField] private Transform _drinkIconContainer;
 	[SerializeField] private SimpleButton _drinkIconPrefab;
 	
+	private LWData.FlowerMonth _currentFlower
+	{
+		get
+		{
+			if (string.IsNullOrEmpty(LWData.current.MainFlower))
+				return new LWData.FlowerMonth();
+			var currentFlower = DateTime.Parse(LWData.current.MainFlower);
+			var data = LWData.current.FlowerDictionary[currentFlower.Month + "/" + currentFlower.Year][currentFlower.Day-1];
+			return data;
+		}
+		set => _currentFlower = value;
+	}
+	
 	[Serializable]
 	public struct Attributes
 	{
@@ -48,8 +62,9 @@ public class LWWaterController : MonoBehaviour
 		
 	}
 
-	private void Start()
+	protected override void Start()
 	{
+		base.Start();
 		var drinks = LWResourceManager.DrinkIcons;
 		for (var i = 0; i < drinks.Count; i++)
 		{
@@ -63,26 +78,15 @@ public class LWWaterController : MonoBehaviour
 	
 	private void OnEnable()
 	{
-		if (!PlayerPrefs.HasKey(LWConfig.TodayDateKey))
+		var current = _currentFlower;
+		if (current.PlantIndex == -1)
 		{
-			PlayerPrefs.SetString(LWConfig.TodayDateKey, DateTime.Today.ToShortDateString());
-			PlayerPrefs.SetInt(LWConfig.DrinkCount, 0);
-		}
-		
-		//reset drink count every day
-		if (PlayerPrefs.GetString(LWConfig.TodayDateKey) != DateTime.Today.ToShortDateString())
-		{
-			_drinkCount = 0;
-			PlayerPrefs.SetInt("DrinkCount", 0);
-			PlayerPrefs.SetString(LWConfig.TodayDateKey, DateTime.Today.ToShortDateString());
+			Debug.LogError("Something went wrong, this is an empty flower");
+			gameObject.SetActive(false);
 		}
 
-		if (PlayerPrefs.HasKey(LWConfig.DrinkCount))
-			_drinkCount = PlayerPrefs.GetInt(LWConfig.DrinkCount);
-		if (PlayerPrefs.HasKey(LWConfig.Goal))
-			_goal = PlayerPrefs.GetInt(LWConfig.Goal);
-		else
-			PlayerPrefs.SetInt(LWConfig.Goal, _goal);
+		_drinkCount = current.DrinkAmount;
+		_goal = LWData.current.Goal;
 		_fillOutline.fillAmount = _drinkCount / (float) _goal;
 		_drinkText.text = _drinkCount + "/" + _goal;
 		Update_DrinkFill();
@@ -94,25 +98,13 @@ public class LWWaterController : MonoBehaviour
 		}
 		for (var i = 0; i < _drinkControllers.Length; i++)
 		{
-			LWData.Drink drink;
+			var drink = new LWData.Drink();
 			if (i < LWData.current.DrinkAttributes.Count)
 			{
 				drink = LWData.current.DrinkAttributes[i];
 			}
 			else
 			{
-				var attributes = "";
-				drink = new LWData.Drink
-				{
-					SpriteIndex = 0
-				};
-				foreach (var item in _attributes)
-				{
-					attributes += item.Name + ":0,";
-				}
-
-				attributes = attributes.Substring(0, attributes.Length - 1);
-				drink.Attributes = attributes;
 				LWData.current.DrinkAttributes.Add(drink);
 			}
 			_drinkControllers[i].Setup(_attributes);
@@ -131,12 +123,15 @@ public class LWWaterController : MonoBehaviour
 	private void SetActiveFlower()
 	{
 		// grabs data from current flower 
-		if (LWData.current.CurrentFlower.PlantIndex == -1)
+		var data = _currentFlower;
+
+		if (data.PlantIndex == -1)
 		{
 			Debug.LogError("There isn't a current flower? There should have been an earlier check");
 			return;
 		}
-		var data = LWData.current.CurrentFlower;
+
+		
 		var spriteIndex = data.SpriteIndex * 2;
 		var plantSprites = LWResourceManager.Sprites[data.PlantIndex];
 		var sprites = new[] {plantSprites[spriteIndex], plantSprites[spriteIndex + 1]};
@@ -148,49 +143,57 @@ public class LWWaterController : MonoBehaviour
 		var drinkAmount = 0;
 		if (_selectedDrink.Attributes.ContainsKey(LWConfig.AttributeWaterKey))
 			drinkAmount = _selectedDrink.Attributes[LWConfig.AttributeWaterKey];
+
+		foreach (var attributes in _selectedDrink.Attributes)
+		{
+			if (_activeAttributes.ContainsKey(attributes.Key))
+				_activeAttributes[attributes.Key] += attributes.Value;
+			else
+			{
+				_activeAttributes.Add(attributes.Key, attributes.Value);
+			}
+		}
+		
 		_drinkCount += drinkAmount;
-		PlayerPrefs.SetInt(LWConfig.DrinkCount, _drinkCount);
 		_drinkText.text = _drinkCount  + "/" + _goal;
 		
-		Update_DrinkFill(); //updates the Sprite Index in here so this must come first?
 		SaveDrink();
+		SetActiveFlower();
 	}
 
 	private void SaveDrink()
 	{
-		var date = DateTime.Parse(LWData.current.CurrentFlower.Date);
-		var newFlower = LWData.current.CurrentFlower;
-		newFlower.Goal = _drinkCount + "/" + _goal;
-		LWData.current.CurrentFlower = newFlower;
-		LWData.current.FlowerDictionary[date.Month + "/" + date.Year][date.Day] = LWData.current.CurrentFlower;
+		var newFlower = _currentFlower;
+		var date = DateTime.Parse(newFlower.Date);
+		newFlower.Goal = _goal;
+		var attributeString = "";
+		foreach (var attribute in _activeAttributes)
+		{
+			attributeString += attribute.Key + ":" + attribute.Value + ",";
+		}
+		attributeString = attributeString.Substring(0, (attributeString.Length -1));
+		newFlower.Attributes = attributeString;
+		newFlower.DrinkAmount = _drinkCount;
+		newFlower.SpriteIndex = Update_DrinkFill();
+		LWData.current.FlowerDictionary[date.Month + "/" + date.Year][date.Day - 1] = newFlower;
+		CheckCompletedFlower();
 		SerializationManager.Save(LWConfig.DataSaveName, LWData.current);
 	}
 	
-	private void Update_DrinkFill()
+	private int Update_DrinkFill()
 	{
 		if (_drinkCount < _goal)
 		{
 			var fillAmount = (float) _drinkCount / _goal;
 			_fillOutline.fillAmount = fillAmount;
-			var newFlower = LWData.current.CurrentFlower;
 			if (fillAmount >= 0.5f)
-			{
-				newFlower.SpriteIndex = 1;
-			}
-			else if (fillAmount >= 1)
-			{
-				newFlower.SpriteIndex = 2;
-			}
-			else
-			{
-				newFlower.SpriteIndex = 0;
-			}
-
-			LWData.current.CurrentFlower = newFlower;
+				return 1;
+			return fillAmount >= 1 ? 2 : 0;
 		}
 		else
 		{
 			_fillOutline.fillAmount = 1;
+			return 2;
 		}
 	}
 	
@@ -212,18 +215,16 @@ public class LWWaterController : MonoBehaviour
 	{
 		if (on)
 		{
-			_isEditMode = on;
 			ButtonEvt_SelectAttribute(0);
-			_animator.SetBool("IsEdit", _isEditMode);
+			_animator.SetBool("IsEdit", on);
 		}
 		else
 		{
 			SaveAttributes();
-			_isEditMode = on;
-			_animator.SetBool("IsEdit", _isEditMode);
-			PlayerPrefs.SetInt("Goal", _goal);
-			Update_DrinkFill();
+			_animator.SetBool("IsEdit", on);
 			UpdateEditAttributes();
+			Update_DrinkFill();
+			SetActiveFlower();
 		}
 	}
 	
@@ -239,65 +240,61 @@ public class LWWaterController : MonoBehaviour
 	{
 		for (var i = 0; i <_drinkControllers.Length; i++)
 		{
-			var attributeString = "";
-			foreach (var value in _drinkControllers[i].Attributes)
-			{
-				attributeString += value.Key + ":" + value.Value + ",";
-			}
-
-			attributeString = attributeString.Substring(0, attributeString.Length - 1);
-			Debug.Log(attributeString);
 			if (i < LWData.current.DrinkAttributes.Count)
 			{
-				LWData.current.DrinkAttributes[i].Attributes = attributeString;
 				LWData.current.DrinkAttributes[i].SpriteIndex = _drinkControllers[i].SpriteIndex;
+				LWData.current.DrinkAttributes[i].Attributes = _drinkControllers[i].Attributes;
 			}
 			else
 			{
-				var drink = new LWData.Drink
-				{
-					Attributes = attributeString, SpriteIndex = _drinkControllers[i].SpriteIndex
-				};
+				var drink = new LWData.Drink();
+				drink.Attributes = _drinkControllers[i].Attributes;
+				drink.SpriteIndex = _drinkControllers[i].SpriteIndex;
 				LWData.current.DrinkAttributes.Add(drink);
 			}
+
 			Debug.Log("Current Data at index " + i + " is: " + LWData.current.DrinkAttributes[i].Attributes);
 			SerializationManager.Save(LWConfig.DataSaveName, LWData.current);
 		}
 	}
 
-	public void ButtonEvt_ChangeGoal(bool isAdd)
-	{
-		if (isAdd)
-		{
-			if (_goal < 12)
-			{
-				_goal++;
-			}
-		}
-		else
-		{
-			if (_goal != 0)
-			{
-				_goal--;
-			} 
-		}
-		_drinkText.text = _goal + " DRINKS";
-	}
-
 	public void ButtonEvt_UpdateGoal()
 	{
-		if (_goalInput.textComponent.text.Length > 0)
+		if (_goalInput.text.Length > 0)
 		{
-			var goal = int.Parse(_goalInput.textComponent.text);
+			var value = _goalInput.text;
+			int.TryParse(value, out var goal);
 			if (goal <= 0)
 			{
 				Debug.LogError("Goal can't be 0, that's pretty sad");
 				return;
 			}
 			_goal = goal;
-			_goalInput.textComponent.text = "";
-			PlayerPrefs.SetInt(LWConfig.Goal, goal);
+			LWData.current.Goal = _goal;
+			var date =DateTime.Parse(LWData.current.MainFlower);
+			LWData.current.FlowerDictionary[date.Month + "/" + date.Year][date.Day - 1].SpriteIndex =
+				Update_DrinkFill();
+			CheckCompletedFlower();
+			SerializationManager.Save(LWConfig.DataSaveName, LWData.current);
+			_goalInput.text = "";
+			_drinkText.text = _drinkCount + "/" + _goal;
 		}
+	}
+
+	private void CheckCompletedFlower()
+	{
+		var date =DateTime.Parse(LWData.current.MainFlower);
+		var currentFlower = LWData.current.FlowerDictionary[date.Month + "/" + date.Year][date.Day - 1];
+		if (currentFlower.IsComplete) return;
+		if (currentFlower.DrinkAmount >= currentFlower.Goal)
+		{
+			var flower = LWResourceManager.Flowers[currentFlower.PlantIndex];
+			LWData.current.FlowerDictionary[date.Month + "/" + date.Year][date.Day - 1].IsComplete = true;
+			LWData.current.Coins += flower.Earns;
+			//SerializationManager.Save(LWConfig.DataSaveName, LWData.current);
+			//IMPORTANT: need to place before a save
+		}
+		
 	}
 	
 	private void ButtonEvt_UpdateDrink(Sprite sprite, int index)

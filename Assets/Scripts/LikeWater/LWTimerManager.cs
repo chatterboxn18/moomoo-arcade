@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Jobs;
+#if UNITY_ANDROID
 using Unity.Notifications.Android;
+#endif
 using UnityEngine;
 
 public class LWTimerManager : MonoBehaviour
@@ -14,7 +16,7 @@ public class LWTimerManager : MonoBehaviour
 	
 	private bool _isRunning;
 	
-	public Action<string> Evt_UpdateTime = delegate {  };
+	public Action<string, bool> Evt_UpdateTime = delegate {  };
 
 	[SerializeField] private AudioController _audioController;
 
@@ -23,27 +25,21 @@ public class LWTimerManager : MonoBehaviour
 	private void Start()
 	{
 		Evt_UpdateTime += UpdateHomeTimer;
-		var channel = new AndroidNotificationChannel()
-		{
-			Id = "like_water",
-			Name = "Like Water Channel",
-			Importance =  Importance.High, 
-			Description = "Channel for Like Water App"
-		};
-		AndroidNotificationCenter.RegisterNotificationChannel(channel);
 	}
 	
 	private void CreateNotification(float time)
 	{
+#if UNITY_ANDROID
 		var notification = new AndroidNotification();
 		notification.Title = "Like Water Reminder";
-		notification.Text = "It's okay to take a break sometimes!";
+		notification.Text = "It's okay to take a break!";
 		notification.SmallIcon = "icon_0";
+		notification.ShouldAutoCancel = true;
 		notification.FireTime = DateTime.Now.AddMinutes(time);
 
-		_currentNotification = AndroidNotificationCenter.SendNotification(notification, "like_water");
+		_currentNotification = AndroidNotificationCenter.SendNotification(notification, LWConfig.NotificationChannel);
+#endif
 	}
-
 	public void DisplayTimer(bool on)
 	{
 		if (!_isRunning) return;
@@ -77,7 +73,7 @@ public class LWTimerManager : MonoBehaviour
 		}
 	}
 	
-	private void UpdateHomeTimer(string time)
+	private void UpdateHomeTimer(string time, bool isDone)
 	{
 		_homeTimer.text = time;
 	}
@@ -92,11 +88,13 @@ public class LWTimerManager : MonoBehaviour
 
 	public void Evt_StopTimer()
 	{
+#if UNITY_ANDROID
 		if (_currentNotification != -1)
 			AndroidNotificationCenter.CancelNotification(_currentNotification);
+#endif
 		DisplayTimer(false);
 		_isRunning = false;
-		Evt_UpdateTime(PlayerPrefs.HasKey(LWConfig.Timer) ? PlayerPrefs.GetString(LWConfig.Timer) : "00:00:00");
+		Evt_UpdateTime(PlayerPrefs.HasKey(LWConfig.Timer) ? PlayerPrefs.GetString(LWConfig.Timer) : "00:00:00", true);
 		_audioController.FadeAudio(false, 0.2f);
 	}
 
@@ -110,11 +108,11 @@ public class LWTimerManager : MonoBehaviour
 		{
 			DisplayTimer(false);
 			_isRunning = false;
-			Evt_UpdateTime("00:00:00");
+			Evt_UpdateTime(PlayerPrefs.HasKey(LWConfig.Timer) ? PlayerPrefs.GetString(LWConfig.Timer) : "00:00:00", true);
 			if (_audioController.Source.isPlaying)
 				_audioController.FadeAudio(false, 0.2f);
 			return;
 		}
-		Evt_UpdateTime($"{time.Hours:00}:{time.Minutes:00}:{time.Seconds:00}");
+		Evt_UpdateTime($"{time.Hours:00}:{time.Minutes:00}:{time.Seconds:00}", false);
 	}
 }
