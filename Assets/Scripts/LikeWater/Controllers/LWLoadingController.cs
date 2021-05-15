@@ -3,33 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Android;
 
-public class LWLoadingController : MonoBehaviour
+namespace LikeWater
 {
-	private Animator _animator;
-	private bool _isLoaded;
-
-	private void Awake()
+	public class LWLoadingController : MonoBehaviour
 	{
-		_animator = GetComponent<Animator>();
-	}
+		private Animator _animator;
+		private bool _isLoaded;
 
-	private void Start()
-	{
-	}
-
-	private void Update()
-	{
-		if (_isLoaded)
-			return;
-		if (LWResourceManager.IsLoaded)
+		private void Awake()
 		{
-			_animator.SetTrigger("DoFinish");
-			_isLoaded = true;
+			_animator = GetComponent<Animator>();
 		}
-	}
 
-	public void AnimEvt_CloseLoader()
-	{
-		gameObject.SetActive(false);
+		private void Start()
+		{
+		}
+
+		private void Update()
+		{
+			if (_isLoaded)
+				return;
+			if (LWResourceManager.IsLoaded)
+			{
+				_animator.SetTrigger("DoFinish");
+				_isLoaded = true;
+			}
+		}
+
+		public void AnimEvt_CloseLoader()
+		{
+			gameObject.SetActive(false);
+		}
 	}
 }

@@ -36,6 +36,7 @@ public class SimpleButton : Selectable, IPointerClickHandler
 	public void SetVisibility(bool on)
 	{
 		_isVisible = on;
+		_canvasGroup.LeanAlpha(on ? 1 : 0, LWConfig.FadeTime);
 	}
 
 	protected override void OnEnable()
@@ -57,7 +58,7 @@ public class SimpleButton : Selectable, IPointerClickHandler
 
 	protected virtual void Update()
 	{
-		if (_isVisible)
+		/*if (_isVisible)
 		{
 			if (_canvasGroup.alpha < 1)
 			{
@@ -84,7 +85,7 @@ public class SimpleButton : Selectable, IPointerClickHandler
 				_timer = 0f;
 				_canvasGroup.alpha = 0;
 			}
-		}
+		}*/
 	}
 
 	public override void OnPointerUp(PointerEventData eventData)

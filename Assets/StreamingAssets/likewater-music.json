@@ -1,23 +1,90 @@
 {
 	"Music": [
 		{
+			"Title": "When This Rain Stops", 
+			"Links": 
+			[
+				{
+					"icon" : "icon-spotify.png",
+					"link" : "https://open.spotify.com/track/6mavVLsxaa4YcPje9qZKcf?si=69258e1b396f496a"
+				},
+				{
+					"icon" : "icon-apple.png",
+					"link" : "https://music.apple.com/us/album/when-this-rain-stops/1560769290?i=1560769291"
+				},
+				{
+					"icon" : "icon-youtube.png",
+					"link" : "https://music.youtube.com/watch?v=R8ja8lDIBt8&feature=share"
+				},
+				{
+					"icon" : "icon-deezer.png",
+					"link" : "https://deezer.page.link/chxAunV1hjTdznJx8"
+				}
+			],
+			"Videos": 
+			[
+				{
+					"title": "[MV] When This Rain Stops",
+					"date": "2021-04-09",
+					"image-url": "https://img.youtube.com/vi/tknKZe_TyqU/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=tknKZe_TyqU",
+					"win": ""
+				},
+				{
+					"title": "[Inkigayo] When This Rain Stops",
+					"date": "2021-04-11",
+					"image-url": "https://img.youtube.com/vi/lRx5_rNiiRg/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=lRx5_rNiiRg",
+					"win": ""
+				},
+				{
+					"title": "[Inkigayo Fancam] When This Rain Stops",
+					"date": "2021-04-11",
+					"image-url": "https://img.youtube.com/vi/QX1IV4EPLo0/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=QX1IV4EPLo0",
+					"win": ""
+				},
+				{
+					"title": "[Inkigayo Full Fancam] When This Rain Stops",
+					"date": "2021-04-11",
+					"image-url": "https://img.youtube.com/vi/9BIswU5zoVQ/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=9BIswU5zoVQ",
+					"win": ""
+				},
+				{
+					"title": "[MCountdown] When This Rain Stops",
+					"date": "2021-04-15",
+					"image-url": "https://img.youtube.com/vi/4w3TENhtiUo/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=4w3TENhtiUo",
+					"win": ""
+				},
+				{
+					"title": "’When This Rain Stops’ & ‘Like Water’ Recording Behind",
+					"date": "2021-04-20",
+					"image-url": "https://img.youtube.com/vi/zFmZxxQt4wU/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=zFmZxxQt4wU",
+					"win": ""
+				}
+			]
+		},
+		{
 			"Title": "Like Water", 
 			"Links": 
 			[
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-spotify.png",
+					"icon" : "icon-spotify.png",
 					"link" : "https://open.spotify.com/track/37LhFxchiyAJVop5JgRZgY?si=704484c815e4449c"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-apple.png",
+					"icon" : "icon-apple.png",
 					"link" : "https://music.apple.com/us/album/like-water/1560769290"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-youtube.png",
+					"icon" : "icon-youtube.png",
 					"link" : "https://music.youtube.com/watch?v=vyuQAgDBKM4"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-deezer.png",
+					"icon" : "icon-deezer.png",
 					"link" : "https://deezer.page.link/R2iPLANfMg9MtHLTA"
 				}
 			],
@@ -35,6 +102,13 @@
 					"date": "2021-04-15",
 					"image-url": "https://img.youtube.com/vi/tCzsvAUuVrc/maxresdefault.jpg",
 					"video-url": "https://www.youtube.com/watch?v=tCzsvAUuVrc",
+					"win": ""
+				},
+				{
+					"title": "[Cultwo Show] Like Water",
+					"date": "2021-04-08",
+					"image-url": "https://img.youtube.com/vi/z9BgND63UqQ/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=z9BgND63UqQ",
 					"win": ""
 				},
 				{
@@ -106,28 +180,42 @@
 					"image-url": "https://img.youtube.com/vi/6CjkivUx4ro/maxresdefault.jpg",
 					"video-url": "https://www.youtube.com/watch?v=6CjkivUx4ro",
 					"win": ""
+				},
+				{
+					"title": "[Mdromeda] Like Water Band Ver.",
+					"date": "2021-04-19",
+					"image-url": "https://img.youtube.com/vi/CAfarUrfG9o/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=CAfarUrfG9o",
+					"win": ""
+				},
+				{
+					"title": "’When This Rain Stops’ & ‘Like Water’ Recording Behind",
+					"date": "2021-04-20",
+					"image-url": "https://img.youtube.com/vi/zFmZxxQt4wU/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=zFmZxxQt4wU",
+					"win": ""
 				}
 			]
 		},
-{
+		{
 			"Title": "Why Can't You Love Me?", 
 			"Links": 
 			[
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-spotify.png",
-					"link" : "https://open.spotify.com/track/7cXJOM8t8pftyFgYp5Sm1N"
+					"icon" : "icon-spotify.png",
+					"link" : "https://open.spotify.com/track/0CyydmXI4QhgUWrZsPOTXA?si=1996fd393a7c409a"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-apple.png",
-					"link" : "https://music.apple.com/us/album/the-road/1560769290"
+					"icon" : "icon-apple.png",
+					"link" : "https://music.apple.com/us/album/why-cant-you-love-me/1560769290?i=1560769293"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-youtube.png",
-					"link" : "https://music.youtube.com/watch?v=DiAuyUOfUEA"
+					"icon" : "icon-youtube.png",
+					"link" : "https://music.youtube.com/watch?v=VM5Q071Rxl8&feature=share"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-deezer.png",
-					"link" : "https://deezer.page.link/3V8BFsicUsnLP54d6"
+					"icon" : "icon-deezer.png",
+					"link" : "https://deezer.page.link/wNCw7XvtbZjWDfHWA"
 				}
 			],
 			"Videos": 
@@ -148,30 +236,62 @@
 				}
 			]
 		},
-{
+		{
 			"Title": "The Road", 
 			"Links": 
 			[
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-spotify.png",
+					"icon" : "icon-spotify.png",
 					"link" : "https://open.spotify.com/track/7cXJOM8t8pftyFgYp5Sm1N"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-apple.png",
+					"icon" : "icon-apple.png",
 					"link" : "https://music.apple.com/us/album/the-road/1560769290"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-youtube.png",
+					"icon" : "icon-youtube.png",
 					"link" : "https://music.youtube.com/watch?v=DiAuyUOfUEA"
 				},
 				{
-					"icon" : "https://revelupgames.s3-us-west-1.amazonaws.com/icon-deezer.png",
+					"icon" : "icon-deezer.png",
 					"link" : "https://deezer.page.link/3V8BFsicUsnLP54d6"
 				}
 			],
 			"Videos": 
 			[
 			
+			]
+		},
+		{
+			"Title": "Best Friend (with Seulgi)", 
+			"Links": 
+			[
+				{
+					"icon" : "icon-spotify.png",
+					"link" : "https://open.spotify.com/track/0F9Xy6OTbkqOv94pklkwKu?si=a5060c7d01c64273"
+				},
+				{
+					"icon" : "icon-apple.png",
+					"link" : "https://music.apple.com/us/album/best-friend-with-seulgi/1560769290?i=1560769596"
+				},
+				{
+					"icon" : "icon-youtube.png",
+					"link" : "https://music.youtube.com/watch?v=baPCoKbXyXM&feature=share"
+				},
+				{
+					"icon" : "icon-deezer.png",
+					"link" : "https://deezer.page.link/PBeKKKt1AZoG7NRA9"
+				}
+			],
+			"Videos": 
+			[
+				{	
+					"title": "‘Best Friend’ Recording Behind",
+					"date": "2021-04-12",
+					"image-url": "https://img.youtube.com/vi/mQLqO-hCldU/maxresdefault.jpg",
+					"video-url": "https://www.youtube.com/watch?v=mQLqO-hCldU",
+					"win": ""
+				}			
 			]
 		}	
 	]

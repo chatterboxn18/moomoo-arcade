@@ -13,10 +13,13 @@ namespace LikeWater
 		private float _time;
 		[SerializeField] private CanvasGroup _editGroup;
 		[SerializeField] private LWTimerManager _timeController;
-		private bool _hasAudio;
+		private bool _hasAudio = true;
 		[SerializeField] private AudioSource _wendyBuzzer;
 
-		private bool _hasNotification;
+		[SerializeField] private AdvanceButton _notificationButton; 
+		[SerializeField] private AdvanceButton _soundButton;
+
+		private bool _hasNotification = true;
 		
 		protected override void Start()
 		{
@@ -27,10 +30,34 @@ namespace LikeWater
 		private void OnEnable()
 		{
 			_timeController.DisplayTimer(false);
-			/*if (PlayerPrefs.HasKey(LWConfig.HasSound))
+			if (PlayerPrefs.HasKey(LWConfig.HasSound))
 			{
-				PlayerPrefs.
-			}*/
+				var on = PlayerPrefs.GetInt(LWConfig.HasSound);
+				if (on == 1)
+				{
+					_soundButton.SetActive(true);
+					_hasAudio = true;
+				}
+				else
+				{
+					_soundButton.SetActive(false);
+					_hasNotification = false;
+				}
+			}
+			if (PlayerPrefs.HasKey(LWConfig.HasNotification))
+			{
+				var on = PlayerPrefs.GetInt(LWConfig.HasNotification);
+				if (on == 1)
+				{
+					_notificationButton.SetActive(true);
+					_hasNotification = true;
+				}
+				else
+				{
+					_notificationButton.SetActive(false);
+					_hasNotification = true;
+				}
+			}
 			if (PlayerPrefs.HasKey(LWConfig.Timer))
 				_timerText.text = PlayerPrefs.GetString(LWConfig.Timer);
 		}
@@ -76,7 +103,7 @@ namespace LikeWater
 	
 		public void UpdateTimer(string time, bool isDone = false)
 		{
-			if (isDone && _hasAudio)
+			if (isDone)
 				_wendyBuzzer.Play();
 			_timerText.text = time;
 		}
@@ -92,7 +119,7 @@ namespace LikeWater
 			_editGroup.gameObject.SetActive(_isEdit);
 		}
 	
-		public void ButtonEvt_Close()
+		public void OnDisable()
 		{
 			_timeController.DisplayTimer(true);
 		}
@@ -101,16 +128,28 @@ namespace LikeWater
 		{
 			if (_isEdit) ButtonEvt_Edit();
 			var time = GetMinutes();
-			_timeController.Evt_StartTimer(time);
+			_timeController.Evt_StartTimer(time, _hasNotification, _hasAudio);
 		}
 	
 		public void ButtonEvt_StopTimer()
 		{
 			//need better way to check if there should be audio on stop timer
-			_hasAudio = false;
 			_timerText.text = PlayerPrefs.HasKey(LWConfig.Timer) ? PlayerPrefs.GetString(LWConfig.Timer) : "00:00:00";
 			_timeController.Evt_StopTimer();
-			_hasAudio = true;
+		}
+
+		public void ButtonEvt_EnableNotification()
+		{
+			_hasNotification = !_hasNotification;
+			_notificationButton.SetActive(_hasNotification);
+			PlayerPrefs.SetInt(LWConfig.HasNotification, _hasNotification ? 1:0);
+		}
+		
+		public void ButtonEvt_EnableAudio()
+		{
+			_hasAudio = !_hasAudio;
+			_soundButton.SetActive(_hasAudio);
+			PlayerPrefs.SetInt(LWConfig.HasSound, _hasAudio ? 1:0);
 		}
 	}
 }

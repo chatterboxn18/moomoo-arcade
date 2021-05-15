@@ -15,7 +15,12 @@ public static class LWConfig
 	public const string WaterNotificationDescription = "Don't forget to stay hydrated. Drink some water <3";
 	public const string StreamNotificationDescription = "Need water? Stream like water.";
 	public const string NotificationChannel = "like_water";
+	public const string ServerPath = "https://revelupgames.s3-us-west-1.amazonaws.com/LikeWater/";
+	public const string ConfigFile = "likewater-config.json";
+	public const string LastModifiedKey = "last-modified";
 	public const float FadeTime = 0.2f;
+	
+	
 
 	public static Color SelectedColor = new Color(39,134,197, 1);
 	public static Color MainColor = new Color(105,169,229, 1);

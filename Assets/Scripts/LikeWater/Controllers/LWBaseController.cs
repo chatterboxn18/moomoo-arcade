@@ -19,13 +19,13 @@ public class LWBaseController : MonoBehaviour
 
 	public void TransitionOn(bool isTo = false)
 	{
-		if (isTo)
-		{
-			Transition(true);
-			return;
-		}
 		if (_overlay != null)
 		{
+			if (_overlay.gameObject.activeSelf && isTo)
+			{
+				Transition(true);
+				return;
+			}
 			_overlay.alpha = 0;
 			_overlay.gameObject.SetActive(true);
 			_overlay.LeanAlpha(1 , LWConfig.FadeTime).setOnComplete(() =>
@@ -40,13 +40,13 @@ public class LWBaseController : MonoBehaviour
 
 	public void TransitionOff(bool isTo = false)
 	{
-		if (isTo)
-		{
-			Transition(false);
-			return;
-		}
 		if (_overlay != null)
 		{
+			if (_overlay.gameObject.activeSelf && isTo)
+			{
+				Transition(false);
+				return;
+			}
 			gameObject.SetActive(true);
 			Transition(false, () =>
 			{

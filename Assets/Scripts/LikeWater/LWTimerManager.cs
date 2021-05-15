@@ -78,12 +78,14 @@ public class LWTimerManager : MonoBehaviour
 		_homeTimer.text = time;
 	}
 	
-	public void Evt_StartTimer(float time)
+	public void Evt_StartTimer(float time, bool hasNotif = false, bool hasAudio = false)
 	{
-		CreateNotification(time);
+		if (hasNotif)
+			CreateNotification(time);
 		_futureTime = DateTime.Now.AddMinutes(time);
 		_isRunning = true;
-		_audioController.FadeAudio(true, 0.2f);
+		if (hasAudio)
+			_audioController.FadeAudio(true, 0.2f);
 	}
 
 	public void Evt_StopTimer()
@@ -95,7 +97,8 @@ public class LWTimerManager : MonoBehaviour
 		DisplayTimer(false);
 		_isRunning = false;
 		Evt_UpdateTime(PlayerPrefs.HasKey(LWConfig.Timer) ? PlayerPrefs.GetString(LWConfig.Timer) : "00:00:00", true);
-		_audioController.FadeAudio(false, 0.2f);
+		if (_audioController.Source.isPlaying)
+			_audioController.FadeAudio(false, 0.2f);
 	}
 
 	private void Update()

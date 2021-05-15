@@ -29,6 +29,10 @@ namespace LikeWater
 		private static List<Flower> _flowers = new List<Flower>();
 
 		public static List<Flower> Flowers => _flowers;
+		
+		private static List<NewsItem> _news = new List<NewsItem>();
+
+		public static List<NewsItem> News => _news;
 
 		public class Flower
 		{
@@ -39,6 +43,14 @@ namespace LikeWater
 			public int Earns;
 		}
 
+		public class NewsItem
+		{
+			public string Title;
+			public string Url;
+			public bool hasThumbnail;
+			public Sprite Thumbnail;
+		}
+		
 		public class VideoItem
 		{
 			public Sprite Image;
@@ -66,10 +78,12 @@ namespace LikeWater
 			LWData.current.Setup(
 				(LWData) SerializationManager.Load(Application.persistentDataPath + "/saves/likewater.rv"));
 			PrepareData();
+			yield return DownloadFiles();
 			yield return GetVideos();
 			yield return GetFlowers();
 			yield return GetSprites();
 			yield return GetDrinkIcons();
+			yield return GetNews();
 			_isLoaded = true;
 		}
 
@@ -97,26 +111,148 @@ namespace LikeWater
 
 		}
 
-		private IEnumerator GetFlowers()
+		private IEnumerator DownloadFiles()
 		{
-			var request = UnityWebRequest.Get(Application.streamingAssetsPath + "/likewater-pots.json");
-			request.SendWebRequest();
-			while (!request.isDone)
+			var configPath = "";
+			var noInternet = false;
+			yield return DownloadFile(LWConfig.ConfigFile, (success, path) =>
 			{
-				yield return null;
+				if (success)
+				{
+					configPath = path;
+				}
+			});
+
+			if (string.IsNullOrEmpty(configPath))
+			{
+				noInternet = true;
+				if (File.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + LWConfig.ConfigFile))
+				{
+					configPath = Application.persistentDataPath + Path.DirectorySeparatorChar + LWConfig.ConfigFile;
+				}
+				else if (File.Exists(
+					Application.streamingAssetsPath + Path.DirectorySeparatorChar + LWConfig.ConfigFile))
+				{
+					configPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + LWConfig.ConfigFile;
+				}
+				else
+				{
+					Debug.LogError("Critical Failure - No config");
+					yield break;
+				}
+			}
+
+			var request = UnityWebRequest.Get(configPath);
+			yield return request.SendWebRequest();
+			var data = JSON.Parse(request.downloadHandler.text);
+			var config = data["config"];
+			var configDate = config["last-update"];
+
+			if (PlayerPrefs.HasKey(LWConfig.LastModifiedKey))
+			{
+				if (configDate == PlayerPrefs.GetString(LWConfig.LastModifiedKey))
+				{
+					//Don't need to download new files
+					yield break;
+				}
+			}
+
+			var configFiles = config["files"].AsArray;
+			var hasError = false;
+			foreach (var file in configFiles)
+			{
+				yield return DownloadFile(file.Value,
+					(complete, path) =>
+					{
+						if (!complete)
+						{
+							Debug.LogError("The path: " + path + " failed to download.");
+							hasError = true;
+						}
+					});
+			}
+			
+			// Don't want to update the config unless all the files downloaded
+			if (!hasError)
+			{
+				Debug.Log("Updated the files");
+				PlayerPrefs.SetString(LWConfig.LastModifiedKey, configDate);
+			}
+			
+		}
+		
+		private IEnumerator DownloadFile(string fileName, Action<bool, string> onComplete)
+		{
+			
+			var request = UnityWebRequest.Get(LWConfig.ServerPath+ fileName);
+			request.useHttpContinue = false;
+			yield return request.SendWebRequest();
+			if (!string.IsNullOrEmpty(request.error))
+			{
+				Debug.LogError("The path " + request.url + " has error: "+ request.error);
+				onComplete(false, fileName);
+				yield break;
 			}
 
 			try
 			{
-				File.WriteAllBytes(Application.persistentDataPath + "/likewater-pots.json",
+				if (File.Exists(Application.persistentDataPath + Path.DirectorySeparatorChar + fileName))
+				{
+					File.Delete(Application.persistentDataPath + Path.DirectorySeparatorChar + fileName);
+				}
+				File.WriteAllBytes(Application.persistentDataPath + Path.DirectorySeparatorChar + fileName,
 					request.downloadHandler.data);
 			}
 			catch (Exception e)
 			{
+				Debug.LogError("And you deleted the old one o.o");
 				Debug.LogError(e);
 			}
 
-			var data = request.downloadHandler.text;
+			onComplete(true, Application.persistentDataPath + Path.DirectorySeparatorChar + fileName);
+
+		}
+
+		private IEnumerator GetFile(string path, Action<bool, DownloadHandler> onComplete)
+		{
+			var request = UnityWebRequest.Get(Application.persistentDataPath + Path.DirectorySeparatorChar + path);
+			yield return request.SendWebRequest();
+			if (!string.IsNullOrEmpty(request.error))
+			{
+				var streaming = UnityWebRequest.Get(Application.streamingAssetsPath + Path.DirectorySeparatorChar + path);
+				yield return streaming.SendWebRequest();
+				onComplete(string.IsNullOrEmpty(streaming.error), streaming.downloadHandler);
+				yield break;
+			}
+			onComplete(string.IsNullOrEmpty(request.error), request.downloadHandler);
+		}
+		
+		private IEnumerator GetTexture(string path, Action<bool, DownloadHandler> onComplete)
+		{
+			var request = UnityWebRequestTexture.GetTexture(Application.persistentDataPath + Path.DirectorySeparatorChar + path);
+			yield return request.SendWebRequest();
+			if (!string.IsNullOrEmpty(request.error))
+			{
+				var streaming = UnityWebRequestTexture.GetTexture(Application.streamingAssetsPath + Path.DirectorySeparatorChar + path);
+				yield return streaming.SendWebRequest();
+				onComplete(string.IsNullOrEmpty(streaming.error), streaming.downloadHandler);
+				yield break;
+			}
+			onComplete(string.IsNullOrEmpty(request.error), request.downloadHandler);
+		}
+		
+		private IEnumerator GetFlowers()
+		{
+			DownloadHandler request = null;
+			var succeed = false;
+			yield return GetFile("likewater-pots.json", (success, handler) =>
+			{
+				succeed = success; 
+				request = handler;
+			});
+
+			if (request == null) yield break;
+			var data = request.text;
 			var flowerItems = JSON.Parse(data);
 			foreach (var flower in flowerItems["Flowers"].AsArray)
 			{
@@ -137,15 +273,17 @@ namespace LikeWater
 
 		private IEnumerator GetVideos()
 		{
-
-			var request = UnityWebRequest.Get(Application.streamingAssetsPath + "/likewater-music.json");
-			request.SendWebRequest();
-			while (!request.isDone)
+			DownloadHandler request = null;
+			var succeed = false;
+			yield return GetFile("likewater-music.json", (success, handler) =>
 			{
-				yield return null;
-			}
+				succeed = success; 
+				request = handler;
+			});
 
-			var data = request.downloadHandler.text;
+			if (request == null) yield break;
+
+			var data = request.text;
 			var videoItems = JSON.Parse(data);
 			foreach (var videoItem in videoItems["Music"].AsArray)
 			{
@@ -161,7 +299,7 @@ namespace LikeWater
 					var linkValue = linkItem.Value;
 					var item = new LinkItem();
 					item.Link = linkValue["link"];
-					yield return GetImage(linkValue["icon"], (sprite) => { item.Icon = sprite; });
+					yield return GetImage(LWConfig.ServerPath + linkValue["icon"], (sprite) => { item.Icon = sprite; });
 					music.Links.Add(item);
 
 				}
@@ -183,18 +321,48 @@ namespace LikeWater
 			}
 		}
 
+		private IEnumerator GetNews()
+		{
+			DownloadHandler request = null;
+			var succeed = false;
+			yield return GetFile("likewater-news.json", (success, handler) =>
+			{
+				succeed = success; 
+				request = handler;
+			});
+
+			if (request == null) yield break;
+
+			var data = request.text;
+			var newItems = JSON.Parse(data);
+			foreach (var newItem in newItems["News"].AsArray)
+			{
+				var news = new NewsItem();
+				var value = newItem.Value;
+				news.Title = value["Title"];
+				news.Url = value["Link"];
+				var thumb = !string.IsNullOrEmpty(value["Thumbnail"]);
+				news.hasThumbnail = thumb;
+				if (thumb)
+					yield return GetImage(value["Thumbnail"], (sprite) => { news.Thumbnail = sprite; });
+				_news.Add(news);
+			}
+
+		}
+		
 		private IEnumerator GetDrinkIcons()
 		{
-			var url = Application.streamingAssetsPath + "/likewater-drinks.png";
-			var request = UnityWebRequestTexture.GetTexture(url);
-			yield return request.SendWebRequest();
-
-			var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
-			if (texture == null)
+			DownloadHandler request = null;
+			var succeed = false;
+			yield return GetTexture("likewater-drinks.png", (success, handler) =>
 			{
-				Debug.LogError("Nothing was downloaded at: " + url);
-				yield break;
-			}
+				succeed = success; 
+				request = handler;
+			});
+
+			if (request == null) yield break;
+
+			var texture = ((DownloadHandlerTexture) request).texture;
 
 			var width = 300;
 			var height = 300;
@@ -217,16 +385,17 @@ namespace LikeWater
 
 		private IEnumerator GetSprites()
 		{
-			var url = Application.streamingAssetsPath + "/likewater-flowers.png";
-			var request = UnityWebRequestTexture.GetTexture(url);
-			yield return request.SendWebRequest();
-
-			var texture = ((DownloadHandlerTexture) request.downloadHandler).texture;
-			if (texture == null)
+			DownloadHandler request = null;
+			var succeed = false;
+			yield return GetTexture("likewater-flowers.png", (success, handler) =>
 			{
-				Debug.LogError("Nothing was downloaded at: " + url);
-				yield break;
-			}
+				succeed = success; 
+				request = handler;
+			});
+
+			if (request == null) yield break;
+
+			var texture = ((DownloadHandlerTexture) request).texture;
 
 			var spriteCount = Mathf.RoundToInt((float) texture.height / _spriteHeight);
 			var spriteWidth = Mathf.RoundToInt((float) texture.width / _spriteWidth);
@@ -248,7 +417,6 @@ namespace LikeWater
 
 		private IEnumerator GetImage(string url, Action<Sprite> onComplete)
 		{
-			Debug.Log(UrlParser(url));
 			if (File.Exists(Application.persistentDataPath + UrlParser(url)))
 			{
 				var sprite = LoadSprite(Application.persistentDataPath + "/Images" + UrlParser(url));

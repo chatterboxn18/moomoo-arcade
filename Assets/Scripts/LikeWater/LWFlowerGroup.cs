@@ -6,88 +6,96 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LWFlowerGroup : MonoBehaviour
+namespace LikeWater
 {
-	[SerializeField] private Plant[] _plants;
-
-	[Serializable]
-	public struct Plant
+	public class LWFlowerGroup : MonoBehaviour
 	{
-		public bool isActive;
-		public Image Image;
-		public Sprite[] Sprites;
-		public TextMeshProUGUI DateTag;
-		public string Date;
-		public SimpleButton Button;
-	}
-	
-	public bool IsFull {get
-	{
-		var isFull = _plants.Count(plant => plant.Image.color.a >= 1);
-		return isFull == 3;
-	}}
+		[SerializeField] private Plant[] _plants;
 
-	private int _frameCount = 45;
-	private int _frame = 0;
-	private int _currentFrame = 0;
-
-	public void SetPlant(int indexOnShelf, Sprite[] sprites, string date = "")
-	{
-		if (!string.IsNullOrEmpty(date))
+		[Serializable]
+		public struct Plant
 		{
-			_plants[indexOnShelf].DateTag.text = date;
+			public bool isActive;
+			public Image Image;
+			public Sprite[] Sprites;
+			public TextMeshProUGUI DateTag;
+			public string Date;
+			public SimpleButton Button;
 		}
 
-		var color = _plants[indexOnShelf].Image.color;
-		_plants[indexOnShelf].Image.sprite = sprites[0];
-		_plants[indexOnShelf].Image.color = color.SetAlpha(1);
-		_plants[indexOnShelf].Sprites = sprites;
-		_plants[indexOnShelf].isActive = true;
-	}
-
-	private void Evt_OpenPopup(string day)
-	{
-		var date = DateTime.Parse(day);
-		var dict = LWData.current.FlowerDictionary;
-		LWData.current.MainFlower = date.ToShortDateString();
-		if (dict[date.Month + "/" + date.Year][date.Day-1].PlantIndex != -1)
+		public bool IsFull
 		{
-			LWTransitionController.TransitionOn(LWTransitionController.Controllers.Popup);
-		}
-		else
-		{
-			LWTransitionController.TransitionTo(LWTransitionController.Controllers.Pot, LWTransitionController.Controllers.Shop );
-		}
-	}
-	
-	public void SetDate(int indexOnShelf, string date)
-	{
-		_plants[indexOnShelf].Button.Evt_BasicEvent_Click += () => Evt_OpenPopup(date);
-		_plants[indexOnShelf].Date = date;
-	}
-	
-	public Plant GetPlant(int index)
-	{
-		if (index < _plants.Length)
-			return _plants[index];
-		throw new Exception();
-	}
-
-	private void Update()
-	{
-		if (_frame >= _frameCount)
-		{
-			var frame = _currentFrame == 0 ? 1 : 0;
-			_currentFrame = frame;
-			foreach (var item in _plants)
+			get
 			{
-				if (item.isActive)
-					item.Image.sprite = item.Sprites[frame];
+				var isFull = _plants.Count(plant => plant.Image.color.a >= 1);
+				return isFull == 3;
+			}
+		}
+
+		private int _frameCount = 45;
+		private int _frame = 0;
+		private int _currentFrame = 0;
+
+		public void SetPlant(int indexOnShelf, Sprite[] sprites, string date = "")
+		{
+			if (!string.IsNullOrEmpty(date))
+			{
+				_plants[indexOnShelf].DateTag.text = date;
 			}
 
-			_frame = 0;
-			return;
+			var color = _plants[indexOnShelf].Image.color;
+			_plants[indexOnShelf].Image.sprite = sprites[0];
+			_plants[indexOnShelf].Image.color = color.SetAlpha(1);
+			_plants[indexOnShelf].Sprites = sprites;
+			_plants[indexOnShelf].isActive = true;
 		}
-		_frame++;
+
+		private void Evt_OpenPopup(string day)
+		{
+			var date = DateTime.Parse(day);
+			var dict = LWData.current.FlowerDictionary;
+			LWData.current.MainFlower = date.ToShortDateString();
+			if (dict[date.Month + "/" + date.Year][date.Day - 1].PlantIndex != -1)
+			{
+				LWTransitionController.TransitionOn(LWTransitionController.Controllers.Popup);
+			}
+			else
+			{
+				LWTransitionController.TransitionTo(LWTransitionController.Controllers.Pot,
+					LWTransitionController.Controllers.Shop);
+			}
+		}
+
+		public void SetDate(int indexOnShelf, string date)
+		{
+			_plants[indexOnShelf].Button.Evt_BasicEvent_Click += () => Evt_OpenPopup(date);
+			_plants[indexOnShelf].Date = date;
+		}
+
+		public Plant GetPlant(int index)
+		{
+			if (index < _plants.Length)
+				return _plants[index];
+			throw new Exception();
+		}
+
+		private void Update()
+		{
+			if (_frame >= _frameCount)
+			{
+				var frame = _currentFrame == 0 ? 1 : 0;
+				_currentFrame = frame;
+				foreach (var item in _plants)
+				{
+					if (item.isActive)
+						item.Image.sprite = item.Sprites[frame];
+				}
+
+				_frame = 0;
+				return;
+			}
+
+			_frame++;
+		}
 	}
 }

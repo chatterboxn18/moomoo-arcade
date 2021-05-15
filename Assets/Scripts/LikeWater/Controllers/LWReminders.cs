@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace LikeWater
 {
-	public class LWReminders :MonoBehaviour
+	public class LWReminders : MonoBehaviour
 	{
 		[SerializeField] private AdvanceButton[] _weekButtons;
 		[SerializeField] private AdvanceButton[] _typeButtons;

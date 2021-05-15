@@ -1,0 +1,14 @@
+{
+	"config" : 
+	{
+		"last-update" : "2021-05-14",
+		"files" : 
+		[
+			"likewater-pots.json",
+			"likewater-music.json",
+			"likewater-drinks.png",
+			"likewater-flowers.png",
+			"likewater-news.json"
+		]
+	}
+}
